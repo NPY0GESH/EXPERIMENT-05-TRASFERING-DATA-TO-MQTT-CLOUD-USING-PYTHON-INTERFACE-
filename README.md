@@ -4,7 +4,6 @@
 ### DATE
 
 
-
 ## EXPERIMENT-05-TRASFERING-DATA-TO-MQTT-CLOUD-USING-PYTHON-INTERFACE-
 
 
@@ -137,8 +136,84 @@ Subscribe to the topic (test/topic).
 Run the Python script.
 
 Check if the message appears in the HiveMQ Web Client.
-## PROGRAM
+## PROGRAM AND OUTPUT
 [
+```
+import time
+import paho.mqtt.client as mqtt
+
+broker = "869443a3b5614c08a07e2d19977f73b1.s1.eu.hivemq.cloud"
+port = 8883
+topic = "iot/demo/sensor"
+username = "hivemq.webclient.1786079486546"
+password = "sukohWCKGt!JRSCx4ke$KYJv6Rue7PQ*"
+
+client = mqtt.Client(
+    client_id="python-publisher-001",
+    callback_api_version=mqtt.CallbackAPIVersion.VERSION2
+)
+
+client.username_pw_set(username, password)
+client.tls_set()
+
+def on_connect(client, userdata, flags, reasonCode, properties):
+    print("Connected to broker, reasonCode:", reasonCode)
+
+def on_publish(client, userdata, mid, reasonCode, properties):
+    print("Message published successfully. MID:", mid)
+
+def on_disconnect(client, userdata, disconnect_flags, reasonCode, properties):
+    print("Disconnected from broker. ReasonCode:", reasonCode)
+
+client.on_connect = on_connect
+client.on_publish = on_publish
+client.on_disconnect = on_disconnect
+
+client.connect(broker, port, keepalive=60)
+
+client.loop_start()
+
+message = "R Venkatramani"
+info = client.publish(topic, payload=message, qos=1, retain=True)
+
+info.wait_for_publish()
+
+time.sleep(1)
+
+client.disconnect()
+
+client.loop_stop()
+
+print(f"Message '{message}' published to topic '{topic}' (QoS=1, Retain=True)")
+
+```
+<img width="1466" height="510" alt="Screenshot 2026-08-24 094415" src="https://github.com/user-attachments/assets/eb797aa8-c52f-48d2-a025-9ac49c51cca5" />
+
+
+```
+import paho.mqtt.client as mqtt
+import time
+import random
+import ssl
+broker = "869443a3b5614c08a07e2d19977f73b1.s1.eu.hivemq.cloud"
+port = 8883
+topic = "iot/demo/sensor"
+username = "hivemq.webclient.1786079486546"
+password = "sukohWCKGt!JRSCx4ke$KYJv6Rue7PQ*"
+client = mqtt.Client(client_id="publisher")
+client.username_pw_set(username, password)
+client.tls_set(tls_version=ssl.PROTOCOL_TLS)
+client.connect(broker, port)
+while True:
+    temprature = round(random.uniform(20.0, 30.0), 2)
+    humidity = round(random.uniform(30.0, 70.0), 2)
+    payload = f"Temprature: {temprature:.2f} C, Humidity: {humidity:.2f}%"
+    client.publish(topic, payload)
+    print(f" Published: {payload} + {topic}")
+    time.sleep(5)
+```
+
+![Uploading Screenshot 2026-08-24 094750.png…]()
 
 
 
@@ -146,15 +221,6 @@ Check if the message appears in the HiveMQ Web Client.
 
 ]
 
-### OUTPUT SCREENSHOTS
-
 
 
 ## Results
-
-Data was successfully transmitted from Python to HiveMQ Cloud and verified using the MQTT Web Client.
-
-
-
- 
-  
