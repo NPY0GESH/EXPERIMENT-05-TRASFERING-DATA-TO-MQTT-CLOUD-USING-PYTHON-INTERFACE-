@@ -213,7 +213,8 @@ while True:
     time.sleep(5)
 ```
 
-![Uploading Screenshot 2026-08-24 094750.png…]()
+<img width="1898" height="905" alt="Screenshot 2026-08-24 094750" src="https://github.com/user-attachments/assets/ef94e0fe-231a-45f8-beea-b4a92afa57fc" />
+
 
 
 
