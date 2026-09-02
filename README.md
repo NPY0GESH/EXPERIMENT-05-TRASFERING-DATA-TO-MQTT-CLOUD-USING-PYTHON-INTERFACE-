@@ -173,7 +173,7 @@ client.connect(broker, port, keepalive=60)
 
 client.loop_start()
 
-message = "R Venkatramani"
+message = "N P YOGESH"
 info = client.publish(topic, payload=message, qos=1, retain=True)
 
 info.wait_for_publish()
